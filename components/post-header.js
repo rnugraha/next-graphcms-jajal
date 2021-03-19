@@ -2,10 +2,14 @@ import Avatar from '../components/avatar'
 import Date from '../components/date'
 import CoverImage from '../components/cover-image'
 import PostTitle from '../components/post-title'
+import Link from 'next/link'
 
-export default function PostHeader({ title, coverImage, date, author }) {
+export default function PostHeader({ title, coverImage, date, author, locale, slug }) {
   return (
     <>
+      <div>
+        <Link locale="en" href={slug}>EN</Link> | <Link locale="fr" href={slug}>FR</Link>
+      </div>
       <PostTitle>{title}</PostTitle>
       <div className="hidden md:block md:mb-12">
         <Avatar name={author.name} picture={author.picture.url} />

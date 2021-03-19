@@ -12,7 +12,7 @@ import PostTitle from 'components/post-title'
 import Head from 'next/head'
 import { CMS_NAME } from 'lib/constants'
 
-export default function Post({ post, morePosts, preview }) {
+export default function Post({ post, morePosts, preview, locale }) {
   const router = useRouter()
 
   if (!router.isFallback && !post?.slug) {
@@ -32,9 +32,11 @@ export default function Post({ post, morePosts, preview }) {
                 <title>
                   {post.title} | Next.js Blog Example with {CMS_NAME}
                 </title>
-                {/* <meta property="og:image" content={post.ogImage.url} /> */}
+                <meta property="og:image" content={post.ogImage.url} />
               </Head>
               <PostHeader
+                slug={post.slug}
+                locale={locale}
                 title={post.title}
                 coverImage={post.coverImage}
                 date={post.date}
@@ -51,12 +53,13 @@ export default function Post({ post, morePosts, preview }) {
   )
 }
 
-export async function getStaticProps({ params, preview = false }) {
-  const data = await getPostAndMorePosts(params.slug, preview)
+export async function getStaticProps({ params, preview = false, locale }) {
+  const data = await getPostAndMorePosts(params.slug, preview, [locale, "en"])
   return {
     props: {
       preview,
       post: data.post,
+      locale,
       morePosts: data.morePosts || [],
     },
     revalidate: 1,
